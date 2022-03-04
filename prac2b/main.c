@@ -11,7 +11,7 @@
 }*/
 
 int main(){
-	char * pchar="cadena\n0";
+	char * pchar="cadena\n0"; //0 al final para que solo imprima "cadena"
 	leon3_print_string(pchar);
 	//leon3_print_uint8(3); leon3_putchar('\n');
 	//leon3_print_uint8(43); leon3_putchar('\n');
