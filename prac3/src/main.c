@@ -12,7 +12,7 @@
 
 void device_hw_irq_level_1_handler(void){
 
-leon3_print_string(“Device HW IRQ user handler \n”);
+leon3_print_string(“Device HW IRQ user handler\n”);
 
 }
 int main()

@@ -65,3 +65,17 @@ int8_t leon3_print_uint8(uint8_t i){
 	}
 
 }
+
+int8_t leon3_print_uint32(uint32_t i){
+	int8_t p1,p2,p3,p4;
+	p1 = i/1000000000;
+	p2 = (i-p1*1000000000)/1000000;
+	p3 = (i-p2*1000000-p1*1000000000)/1000;
+	p4 = i-p3*1000-p2*1000000-p1*1000000000;
+	leon3_print_uint8(p1);
+	leon3_print_uint8(p2);
+	leon3_print_uint8(p3);
+	leon3_print_uint8(p4);
+	leon3_print_string("\n");
+	return 0;
+}
