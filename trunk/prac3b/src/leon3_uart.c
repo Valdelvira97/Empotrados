@@ -27,6 +27,20 @@ volatile uint32_t Scaler; /* 0x8000010C */
 //! LEON3 UART A Transmit FIFO is EMPTY
 #define LEON3_UART_TFE (0x4)
 
+//EDEL: añado aqui los defines
+//********************************************************
+//CTRL REGISTER MASKS
+
+//!LEON3 UART CTRL RX ENABLE MASK
+#define LEON3_UART_CTRL_RX_ENABLE (0x001)
+
+//!LEON3 UART CTRL RX IRQ ENABLE MASK
+#define LEON3_UART_CTRL_RX_IRQ_ENABLE (1 << 2)
+
+//!LEON3 UART SET_LOOP_BACK MASK
+#define LEON3_UART_CTRL_SET_LOOP_BACK  (0x080)
+
+
 struct UART_regs * const pLEON3_UART_REGS= (struct UART_regs *)0x80000100;
 
 
@@ -65,14 +79,18 @@ char leon3_getchar(){
 
 void leon3_uart_ctrl_rx_enable(){
 	uint32_t bit = (1 << 0);
-
+  // EDEL: mismo comentario que en las siguientes
 	if ((pLEON3_UART_REGS -> Ctrl & bit) == 0){
 		pLEON3_UART_REGS -> Ctrl = ((pLEON3_UART_REGS -> Ctrl) | bit);
 	}
 }
 
+
 void leon3_uart_ctrl_rx_irq_enable(){
 	uint32_t bit = (1 << 2);
+
+  //EDEL: Mejora, esto hace lo mismo.
+	//pLEON3_UART_REGS->Ctrl |= LEON3_UART_CTRL_RX_IRQ_ENABLE;
 
 	if ((pLEON3_UART_REGS -> Ctrl & bit) == 0){
 		pLEON3_UART_REGS -> Ctrl = ((pLEON3_UART_REGS -> Ctrl) | bit);
@@ -84,9 +102,13 @@ void leon3_uart_ctrl_config_rxtx_loop(uint8_t set_rxtxloop){
 	uint32_t loop_back = pLEON3_UART_REGS -> Ctrl;
 
 	if (set_rxtxloop == 0){
-		pLEON3_UART_REGS -> Ctrl = (pLEON3_UART_REGS -> Ctrl & ~bit);
+		//Mejora:  pLEON3_UART_REGS -> Ctrl = (pLEON3_UART_REGS -> Ctrl & ~bit);
+		//Mejora: es mejor usar una macro como máscara
+		pLEON3_UART_REGS->Ctrl |= LEON3_UART_CTRL_SET_LOOP_BACK;
 	}else if (set_rxtxloop == 1){
-		pLEON3_UART_REGS -> Ctrl = (pLEON3_UART_REGS -> Ctrl | bit);
+    //Mejora: pLEON3_UART_REGS -> Ctrl = (pLEON3_UART_REGS -> Ctrl | bit);
+		//Mejora: es mejor usar una macro como máscara
+		pLEON3_UART_REGS->Ctrl &= ~LEON3_UART_CTRL_SET_LOOP_BACK;
 	}else {
 		leon3_putchar("Error");
 	}
