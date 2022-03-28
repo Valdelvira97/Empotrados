@@ -37,9 +37,17 @@ leon3_set_trap_handler(0x83,leon3_trap_handler_enable_irqs);
 leon3_set_trap_ handler(0x84,leon3_trap_handler_disable_irqs);
 //Llamada al sistema para deshabilitar las interrupciones
 leon3_sys_call_disable_irqs();
+
+//EDEL: Falta esto
+//Enmascarar todas las interrupciones, sólo desenmascaremos aquellas que tenemos manejadas.
+leon3_mask_all_irqs();
+
 //COMPLETAR instalando como manejador de la interrupción de
 //nivel 2 la rutina uart_rx_irq_handler siguiendo el mismo
 //patrón de la prac3a
+//EDEL: Falta esto
+leon3_install_user_hw_irq_handler(2, uart_rx_irq_handler);
+
 //FIN COMPLETAR
 //Habilito loop-back
 leon3_uart_ctrl_config_rxtx_loop(1);
@@ -49,6 +57,15 @@ leon3_uart_ctrl_rx_irq_enable();
 leon3_uart_ctrl_rx_enable ();
 //COMPLETAR habilitando las interrupciones y
 //desenmascarando la interrupción de nivel 2
+
+//EDEL: Falta esto
+//Desenmascarar la interrupción de nivel 2
+leon3_unmask_irq(2);
+
+//EDEL: Falta esto
+//Habilitar las interrupciones
+leon3_sys_call_enable_irqs();
+
 //FIN COMPLETAR
 leon3_putchar('A');
 //Sondeo si los 8 caracteres se han recibido
@@ -68,3 +85,5 @@ while(!leon3_uart_tx_fifo_is_empty())
 ;
 return 0;
 }
+
+//NOTE: Te he corregido la P3 y P3b en esta misma carpeta
