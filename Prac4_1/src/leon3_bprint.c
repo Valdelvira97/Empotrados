@@ -66,7 +66,7 @@ int8_t leon3_print_uint8(uint8_t i){
 
 }
 
-int8_t leon3_print_uint32(uint32_t i){
+/*int8_t leon3_print_uint32(uint32_t i){
 	int8_t p1,p2,p3,p4;
 	p1 = i/1000000000;
 	p2 = (i-p1*1000000000)/1000000;
@@ -78,4 +78,31 @@ int8_t leon3_print_uint32(uint32_t i){
 	leon3_print_uint8(p4);
 	leon3_print_string("\n");
 	return 0;
+}*/
+
+
+int8_t leon3_print_uint32(uint32_t i){
+	
+	int8_t error=0;
+	uint32_t aux;
+	int8_t first_digit=0;
+	aux=1000000000;
+
+	if(i==0)
+		leon3_putchar('0');
+	else{
+		while(aux&&(!error)){
+			uint8_t digit;
+
+			digit=i/aux;
+			i-=aux*digit;
+			aux=aux/10;
+			if(first_digit||digit){
+				error=leon3_putchar('0'+digit);
+				first_digit=1;
+			}
+		}
+	}
+	return error;
+	
 }

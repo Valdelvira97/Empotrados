@@ -125,30 +125,32 @@ uint8_t leon3_timer_config(uint8_t timerId
 		//el bit numero 5 para CH, por tanto 2 a la 5 = 32
 
 		if(chain_with_prec_timer){
-
-			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|32;
-
+            //Mucho mejor si utilizas las macros.
+			//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|32;
+            pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|=(LEON3_TIMER_CHAIN_WITH_PREC_TIMER);
 		}
 
 		else{
 
-			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|32));
-
+			//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|32));
+            pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl&=(~LEON3_TIMER_CHAIN_WITH_PREC_TIMER);
 		}
 
 		//TODO
 		//Configura el campo Restart del timerId (sin cambiar el resto de campos de Ctrl) que determina si debe reiniciarse el timer tras el underflow
 		//Usa las máscaras definidas en LEON3 Timer Ctrl Masks
 
-		if(chain_with_prec_timer==0){ //el bit numero 1 es el que contiene restart, por eso el valor 2, 2 a la 1
+		if(restart_timer){ //el bit numero 1 es el que contiene restart, por eso el valor 2, 2 a la 1
 
-			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|2;
+			//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|2;
+			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|=LEON3_TIMER_RESTART;
 
 		}
 
 		else{
 
-			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|2));
+			//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|2));
+			pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl&=(~LEON3_TIMER_RESTART);
 
 		}
 
@@ -177,8 +179,8 @@ uint8_t leon3_timer_enable_irq(uint8_t timerId){
 		//Usa las máscaras definidas en LEON3 Timer Ctrl Masks
 
 		//el bit numero 3 es el que contiene interrupt enable, por eso el valor 8, 2 a la 3
-		pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|8;
-
+		//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|8;
+        pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|=LEON3_TIMER_ENABLE_IRQ;
 	}else
 
 		error=1;
@@ -203,8 +205,8 @@ uint8_t leon3_timer_disable_irq(uint8_t timerId){
 		//Use the LEON3 Timer Ctrl Masks
 
 		//De nuevo 8 por ser el bit tres para enable y disable
-		pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|8));
-
+		//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|8));
+        pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl&=(~LEON3_TIMER_ENABLE_IRQ);
 	}else
 		error=1;
 
@@ -226,8 +228,8 @@ uint8_t leon3_timer_enable(uint8_t timerId){
 		//Usa las máscaras definidas en LEON3 Timer Ctrl Masks
 
 		//para timerId es el bit 0, 2 a la 0 = 1
-		pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|1;
-
+		//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|1;
+        pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl|=LEON3_TIMER_ENABLE;
 
 	}else
 		error=1;
@@ -249,8 +251,8 @@ uint8_t leon3_timer_disable(uint8_t timerId){
 		//Deshabilitar el timerId sin cambiar el resto de campos de Ctrl
 		//Usa las máscaras definidas en LEON3 Timer Ctrl Masks
 
-		pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|1));
-
+		//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|1));
+        pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl&=(~LEON3_TIMER_ENABLE); 
 
 	}else
 		error=1;
@@ -273,8 +275,8 @@ uint8_t leon3_timer_clear_irq(uint8_t timerId){
 		//Usa las máscaras definidas en LEON3 Timer Ctrl Masks
 
 		//bit 4 para interrupt pending, 2 a la 4 = 16
-		pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|16));
-
+		//pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl=(~(~(pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl)|16));
+        pLEON3_TimerUnit_REGS->Timer[timerId].Ctrl&=(~LEON3_TIMER_CLEAR_IRQ);
 
 
 	}else
