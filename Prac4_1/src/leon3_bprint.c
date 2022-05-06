@@ -12,11 +12,15 @@ char uni_char, dec_char, cent_char;	//cadena de caracteres para unidades, decena
 
 int8_t leon3_print_string(char* str){
 	
+	int8_t error = 0;
 	int i = 0;
-	while(str[i] != '0'){
-		leon3_putchar(str[i]);
-		i++;
+	while(*str != '\0'){
+		error = leon3_putchar(*str);
+		str++;
 	}
+
+	while(!leon3_uart_tx_fifo_is_empty());
+	return error;
 }
 
 int8_t leon3_print_uint8(uint8_t i){

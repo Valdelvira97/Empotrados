@@ -55,7 +55,7 @@ int8_t leon3_putchar(char c)
 		} //Espera mientras la cola de transmisión esté llena
 	if(write_timeout < 0xAAAAA){
 		//COMPLETAR. Escribir el carácter en el registro Data
-		pLEON3_UART_REGS-> Data =c;
+		pLEON3_UART_REGS-> Data = c;
 		}
 	return (write_timeout == 0xAAAAA);
 }

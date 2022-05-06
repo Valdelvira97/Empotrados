@@ -34,7 +34,6 @@ typedef unsigned char bool_t;
 #else
 typedef bool bool_t;
 #endif
-typedef unsigned char byte_t;
 
 
 #endif /* LEON3_TYPES_H_ */

@@ -109,6 +109,6 @@ void init_timing_service(uint32_t currentTime_in_Y2K){
 	//Llamada al sistema para habilitar interrupciones
 	//SysCall to Enable Interrupts
 
-	leon3_syscall_enable_irq();
+	leon3_sys_call_enable_irqs();
 
 }
